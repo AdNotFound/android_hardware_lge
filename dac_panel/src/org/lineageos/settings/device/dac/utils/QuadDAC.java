@@ -3,6 +3,7 @@ package org.lineageos.settings.device.dac.utils;
 import android.media.AudioSystem;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.util.Log;
 
 import java.util.ArrayList;
 
