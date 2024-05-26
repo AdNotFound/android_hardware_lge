@@ -6,8 +6,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(AUDIO_FEATURE_ENABLED_EXT_AMPLIFIER),true)
-
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := audio_amplifier.hifi_dac
@@ -46,5 +44,3 @@ LOCAL_CFLAGS += \
 endif
 
 include $(BUILD_SHARED_LIBRARY)
-
-endif # AUDIO_FEATURE_ENABLED_EXT_AMPLIFIER
