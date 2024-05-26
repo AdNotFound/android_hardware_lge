@@ -5,11 +5,11 @@ import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 import vendor.lge.hardware.audio.dac.control.V2_0.Feature;
 import vendor.lge.hardware.audio.dac.control.V2_0.FeatureStates;
 import vendor.lge.hardware.audio.dac.control.V2_0.IDacControl;
+import org.lineageos.hardware.util.FileUtils;
+
 
 public class QuadDAC {
 
