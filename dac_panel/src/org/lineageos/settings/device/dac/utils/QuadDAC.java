@@ -9,6 +9,7 @@ import vendor.lge.hardware.audio.dac.control.V2_0.Feature;
 import vendor.lge.hardware.audio.dac.control.V2_0.FeatureStates;
 import vendor.lge.hardware.audio.dac.control.V2_0.IDacControl;
 import org.lineageos.hardware.util.FileUtils;
+import java.util.ArrayList;
 
 
 public class QuadDAC {
@@ -29,29 +30,26 @@ public class QuadDAC {
         dac_service_available = true;
     }
 
-    public static void enable() throws RemoteException
+    public static void enable(IDacControl dac)
     {
         try {
             dac.setHifiDacState(true);
+            
+            int digital_filter = getDigitalFilter(dac);
+            int sound_preset = getSoundPreset(dac);
+            int left_balance = getLeftBalance(dac);
+            int right_balance = getRightBalance(dac);
+            int mode = getDACMode(dac);
+            int avc_vol = getAVCVolume(dac);
 
-            int mode = getDACMode();
-            int left_balance = getLeftBalance();
-            int right_balance = getRightBalance();
-            int avc_vol = getAVCVolume();
-            int digital_filter = getDigitalFilter();
-            setDACMode(mode);
-            setLeftBalance(left_balance);
-            setRightBalance(right_balance);
-            setAVCVolume(avc_vol);
-            setDigitalFilter(digital_filter);
+            setDACMode(dac, mode);
+            setLeftBalance(dac, left_balance);
+            setRightBalance(dac, right_balance);
+            setDigitalFilter(dac, digital_filter);
+            setSoundPreset(dac, sound_preset);
+            setAVCVolume(dac, avc_vol);
 
-            // Sound presets are disabled on the open-source audio HAL.
-            if(dac_features.contains(Feature.SoundPreset)) {
-                int sound_preset = getSoundPreset();
-                setSoundPreset(sound_preset);
-            }
-
-            // Kernel-side implementation needed for custom filters
+             // Sound presets are disabled on the open-source audio HAL.
             if(dac_features.contains(Feature.CustomFilter)) {
                 int custom_filter_shape = getCustomFilterShape();
                 int custom_filter_symmetry = getCustomFilterSymmetry();
@@ -66,10 +64,12 @@ public class QuadDAC {
                     setCustomFilterCoeff(i, custom_filter_coefficients[i]);
                 }
             }
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void disable() throws RemoteException
+    public static void disable(IDacControl dac) throws RemoteException
     {
         dac.setHifiDacState(false);
     }
@@ -82,28 +82,28 @@ public class QuadDAC {
     {
         return dac.getSupportedFeatureValues(feature);
     }
-
-    public static void setDACMode(int mode) throws RemoteException
+    
+    public static void setDACMode(IDacControl dac, int mode) throws RemoteException
     {
         dac.setFeatureValue(Feature.HifiMode, mode);
     }
 
-    public static int getDACMode() throws RemoteException
+    public static int getDACMode(IDacControl dac) throws RemoteException
     {
         return dac.getFeatureValue(Feature.HifiMode);
     }
 
-    public static void setAVCVolume(int avc_volume) throws RemoteException
+    public static void setAVCVolume(IDacControl dac, int avc_volume) throws RemoteException
     {
         dac.setFeatureValue(Feature.AVCVolume, avc_volume);
     }
 
-    public static int getAVCVolume() throws RemoteException
+    public static int getAVCVolume(IDacControl dac) throws RemoteException
     {
         return dac.getFeatureValue(Feature.AVCVolume);
     }
 
-    public static void setDigitalFilter(int filter) throws RemoteException
+    public static void setDigitalFilter(IDacControl dac, int filter) throws RemoteException
     {
         dac.setFeatureValue(Feature.DigitalFilter, filter);
         if(dac_features.contains(Feature.CustomFilter) && filter == 3) {/* Custom filter */
@@ -116,45 +116,45 @@ public class QuadDAC {
         }
     }
 
-    public static int getDigitalFilter() throws RemoteException
+    public static int getDigitalFilter(IDacControl dac) throws RemoteException
     {
         return dac.getFeatureValue(Feature.DigitalFilter);
     }
 
-    public static void setSoundPreset(int preset) throws RemoteException
+    public static void setSoundPreset(IDacControl dac, int preset) throws RemoteException
     {
         if(dac_features.contains(Feature.SoundPreset))
             dac.setFeatureValue(Feature.SoundPreset, preset);
     }
 
-    public static int getSoundPreset() throws RemoteException
+    public static int getSoundPreset(IDacControl dac) throws RemoteException
     {
         if(!dac_features.contains(Feature.SoundPreset))
             return 0;
         return dac.getFeatureValue(Feature.SoundPreset);
     }
 
-    public static void setLeftBalance(int balance) throws RemoteException
+    public static void setLeftBalance(IDacControl dac, int balance) throws RemoteException
     {
         dac.setFeatureValue(Feature.BalanceLeft, balance);
     }
 
-    public static int getLeftBalance() throws RemoteException
+    public static int getLeftBalance(IDacControl dac) throws RemoteException
     {
         return dac.getFeatureValue(Feature.BalanceLeft);
     }
 
-    public static void setRightBalance(int balance) throws RemoteException
+    public static void setRightBalance(IDacControl dac, int balance) throws RemoteException
     {
         dac.setFeatureValue(Feature.BalanceRight, balance);
     }
 
-    public static int getRightBalance() throws RemoteException
+    public static int getRightBalance(IDacControl dac) throws RemoteException
     {
         return dac.getFeatureValue(Feature.BalanceRight);
     }
 
-    public static boolean isEnabled() throws RemoteException
+    public static boolean isEnabled(IDacControl dac) throws RemoteException
     {
         return dac.getHifiDacState();
     }
