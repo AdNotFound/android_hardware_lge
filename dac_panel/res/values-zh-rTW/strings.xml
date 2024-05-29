@@ -36,7 +36,7 @@
     <string name="hifi_mode">HiFi 模式</string>
     <string name="hifi_mode_normal">標準</string>
     <string name="hifi_mode_him">高阻抗</string>
-    <string name="hifi_mode_aux-him">AUX 高阻抗</string>
+    <string name="hifi_mode_aux-him">AUX</string>
     <string name="avc_volume">AVC 音量</string>
     <string name="avc_volume_summary">放大音量</string>
 </resources>
