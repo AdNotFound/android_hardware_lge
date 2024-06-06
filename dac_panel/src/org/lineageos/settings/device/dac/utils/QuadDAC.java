@@ -64,9 +64,7 @@ public class QuadDAC {
                     setCustomFilterCoeff(i, custom_filter_coefficients[i]);
                 }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) {}
     }
 
     public static void disable(IDacControl dac) throws RemoteException

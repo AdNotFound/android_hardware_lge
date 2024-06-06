@@ -34,9 +34,7 @@ public class QuadDACTileService extends TileService {
                 QuadDAC.enable(dac);
                 setTileActive();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) {}
     }
 
     @Override
